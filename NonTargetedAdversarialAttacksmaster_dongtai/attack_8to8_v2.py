@@ -1,4 +1,9 @@
-"""Implementation of sample attack. Finally, the generated adversarial sample is judged by eight models"""
+"""Implementation of sample attack. Finally, the generated adversarial sample is judged by eight models
+
+        noise = noise / tf.reduce_mean(tf.abs(noise), [1, 2, 3], keep_dims=True)
+        noise = momentum * grad + noise
+        adv = x + alpha * tf.sign(noise)
+"""
 
 from __future__ import absolute_import
 from __future__ import division
@@ -197,7 +202,7 @@ def main(_):
                                                         weights=1.0)
 
         noise = tf.gradients(cross_entropy, x)[0]
-        noise = noise / tf.reduce_mean(tf.abs(noise), [1, 2, 3], keep_dims=True)
+        noise = noise / tf.reduce_mean(tf.abs(noise), [1, 2, 3], keep_dims=True)   # 可以改成 noise = noise / tf.reduce_sum(tf.abs(noise), [1, 2, 3], keep_dims=True)
         grad = tf.placeholder(tf.float32, shape=batch_shape)
         noise = momentum * grad + noise
         adv = x + alpha * tf.sign(noise)
